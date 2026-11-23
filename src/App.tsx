@@ -1,122 +1,89 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useEffect } from 'react';
+import { AppShell } from './components/layout/AppShell';
+import { LoginView } from './features/auth/LoginView';
+import { DashboardView } from './features/dashboard/DashboardView';
+import { ProductosView } from './features/inventario/ProductosView';
+import { MovimientosView } from './features/inventario/MovimientosView';
+import { CategoriasView } from './features/inventario/CategoriasView';
+import { AlertasStockView } from './features/inventario/AlertasStockView';
+import { OrdenesTrabajoView } from './features/servicio/OrdenesTrabajoView';
+import { AsignarRepuestoView } from './features/servicio/AsignarRepuestoView';
+import { HistorialOrdenesView } from './features/servicio/HistorialOrdenesView';
+import { UsuariosView } from './features/admin/UsuariosView';
+import { ReportesView } from './features/admin/ReportesView';
+import { ArquitecturaView } from './features/sistema/ArquitecturaView';
+import {
+  applyThemeToDom,
+  useAdminStore,
+  useAuthStore,
+  useInventoryStore,
+  useNavigationStore,
+  useServiceStore,
+  useThemeStore,
+} from './store';
 
-function App() {
-  const [count, setCount] = useState(0)
+export function App() {
+  const theme = useThemeStore((s) => s.theme);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const usuario = useAuthStore((s) => s.usuario);
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+  const activeSection = useNavigationStore((s) => s.activeSection);
+  const ensureAllowedForRole = useNavigationStore((s) => s.ensureAllowedForRole);
 
-      <div className="ticks"></div>
+  const fetchInventoryAll = useInventoryStore((s) => s.fetchInventoryAll);
+  const fetchServiceAll = useServiceStore((s) => s.fetchServiceAll);
+  const fetchAdminAll = useAdminStore((s) => s.fetchAdminAll);
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+  useEffect(() => {
+    applyThemeToDom(theme);
+  }, [theme]);
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+  useEffect(() => {
+    if (!isAuthenticated || !usuario) return;
+    ensureAllowedForRole(usuario.nombre_rol);
+    void Promise.all([fetchInventoryAll(), fetchServiceAll(), fetchAdminAll()]);
+  }, [
+    isAuthenticated,
+    usuario,
+    ensureAllowedForRole,
+    fetchInventoryAll,
+    fetchServiceAll,
+    fetchAdminAll,
+  ]);
+
+  if (!isAuthenticated || !usuario) {
+    return <LoginView />;
+  }
+
+  const renderSection = () => {
+    switch (activeSection) {
+      case 'ordenes':
+        return <OrdenesTrabajoView />;
+      case 'asignar-repuesto':
+        return <AsignarRepuestoView />;
+      case 'historial':
+        return <HistorialOrdenesView />;
+      case 'productos':
+        return <ProductosView />;
+      case 'movimientos':
+        return <MovimientosView />;
+      case 'categorias':
+        return <CategoriasView />;
+      case 'alertas':
+        return <AlertasStockView />;
+      case 'usuarios':
+        return <UsuariosView />;
+      case 'reportes':
+        return <ReportesView />;
+      case 'arquitectura':
+        return <ArquitecturaView />;
+      case 'dashboard':
+      default:
+        return <DashboardView />;
+    }
+  };
+
+  return <AppShell>{renderSection()}</AppShell>;
 }
 
-export default App
+export default App;
