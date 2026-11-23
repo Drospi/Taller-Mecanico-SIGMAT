@@ -1,0 +1,10 @@
+export { RolTable } from './rol.table.ts';
+export { UsuarioTable } from './usuario.table.ts';
+export { VehiculoTable } from './vehiculo.table.ts';
+export { CategoriaTable } from './categoria.table.ts';
+export { ProductoTable } from './producto.table.ts';
+export { OrdenTrabajoTable } from './ordenTrabajo.table.ts';
+export { DetalleOrdenRepuestoTable } from './detalleOrdenRepuesto.table.ts';
+export { MovimientoInventarioTable } from './movimientoInventario.table.ts';
+export { AlertaStockTable } from './alertaStock.table.ts';
+export { ReporteTable } from './reporte.table.ts';
