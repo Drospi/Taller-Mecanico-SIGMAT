@@ -1,111 +1,163 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+@import "tailwindcss";
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+@layer base {
+  :root,
+  [data-theme="dark"] {
+    --bg-base: #0A0A0C;
+    --bg-surface: #121316;
+    --bg-elevated: #1A1C21;
+    --bg-muted: #22252C;
+    --bg-hover: #262932;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    --border-subtle: #24272F;
+    --border-strong: #373B46;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+    --text-primary: #F7F8FA;
+    --text-secondary: #A5AAB5;
+    --text-muted: #6F7583;
+
+    --accent: #F2491E;
+    --accent-hover: #FF5B30;
+    --accent-active: #D83B12;
+    --accent-soft: rgba(242, 73, 30, 0.14);
+    --accent-border: rgba(242, 73, 30, 0.42);
+    --accent-text: #FFFFFF;
+
+    --status-ok: #8CE043;
+    --status-ok-soft: rgba(140, 224, 67, 0.14);
+    --status-warn: #F59E0B;
+    --status-warn-soft: rgba(245, 158, 11, 0.15);
+    --status-danger: #EF4444;
+    --status-danger-soft: rgba(239, 68, 68, 0.16);
+    --status-info: #3B82F6;
+    --status-info-soft: rgba(59, 130, 246, 0.15);
+    --status-neutral: #CFD4DD;
+
+    --metal-gradient: linear-gradient(135deg, #1E2026 0%, #111215 55%, #1A1C22 100%);
+    --hero-glow: radial-gradient(circle at 82% 28%, rgba(242, 73, 30, 0.28) 0%, rgba(242, 73, 30, 0.05) 38%, transparent 66%);
+    --shadow-card: 0 12px 30px -12px rgba(0, 0, 0, 0.65);
+
+    color-scheme: dark;
+  }
+
+  [data-theme="light"] {
+    --bg-base: #F3F3F1;
+    --bg-surface: #FFFFFF;
+    --bg-elevated: #ECECE9;
+    --bg-muted: #E3E4E0;
+    --bg-hover: #E7E8E5;
+
+    --border-subtle: #D8DBE0;
+    --border-strong: #BCC1CC;
+
+    --text-primary: #0E1014;
+    --text-secondary: #484E5A;
+    --text-muted: #6C7382;
+
+    --accent: #E64217;
+    --accent-hover: #CC3710;
+    --accent-active: #B32E0B;
+    --accent-soft: rgba(230, 66, 23, 0.10);
+    --accent-border: rgba(230, 66, 23, 0.35);
+    --accent-text: #FFFFFF;
+
+    --status-ok: #2D9A34;
+    --status-ok-soft: rgba(45, 154, 52, 0.12);
+    --status-warn: #C97A06;
+    --status-warn-soft: rgba(201, 122, 6, 0.12);
+    --status-danger: #DC2626;
+    --status-danger-soft: rgba(220, 38, 38, 0.11);
+    --status-info: #2563EB;
+    --status-info-soft: rgba(37, 99, 235, 0.11);
+    --status-neutral: #505766;
+
+    --metal-gradient: linear-gradient(135deg, #FFFFFF 0%, #EFEFED 55%, #E6E7E3 100%);
+    --hero-glow: radial-gradient(circle at 82% 28%, rgba(230, 66, 23, 0.18) 0%, rgba(230, 66, 23, 0.04) 40%, transparent 68%);
+    --shadow-card: 0 10px 26px -12px rgba(14, 16, 20, 0.12);
+
+    color-scheme: light;
+  }
+
+  * {
+    box-sizing: border-box;
+    border-color: var(--border-subtle);
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  .font-mono-tech {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+/* Textura industrial sutil estilo AXIS WORKS */
+.sigmat-grid-bg {
+  background-image:
+    linear-gradient(to right, var(--border-subtle) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border-subtle) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+.sigmat-hero-surface {
+  background-color: var(--bg-surface);
+  background-image: var(--hero-glow);
 }
 
-body {
-  margin: 0;
+.sigmat-metal-surface {
+  background: var(--metal-gradient);
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+.sigmat-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.18s ease, background-color 0.2s ease, transform 0.18s ease;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
+.sigmat-card-interactive:hover {
+  border-color: var(--border-strong);
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+.sigmat-cta-banner {
+  background: linear-gradient(115deg, #F2491E 0%, #D93A10 65%, #B82E0A 100%);
+  color: #FFFFFF;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* Scrollbars industriales */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
 }
